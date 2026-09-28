@@ -1,0 +1,178 @@
+  return (
+    <SafeAreaView style={styles.container}>
+      <LinearGradient colors={['#0F172A', '#020617', '#000000']} style={StyleSheet.absoluteFillObject} />
+      
+      {/* 1. Header & Caching Indicator */}
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <View style={styles.iconBox}>
+            <Feather name="map-pin" size={14} color="#60A5FA" />
+          </View>
+          <View>
+            <View style={styles.badgeRow}>
+              <Text style={styles.imdBadge}>IMD PS-76</Text>
+              <View style={styles.offlinePill}>
+                <View style={styles.greenPulse} />
+                <Text style={styles.offlineText}>SQLite Offline Cached (2m ago)</Text>
+              </View>
+            </View>
+            <Text style={styles.locationText}>Khed Shivapur, Pune <Text style={styles.pinCode}>• 412205</Text></Text>
+          </View>
+        </View>
+      </View>
+
+      {/* 6. Time-of-Day Simulator */}
+      <View style={styles.judgeControl}>
+        <View style={styles.judgeHeader}>
+          <View style={styles.judgeHeaderLeft}>
+            <View style={styles.cyanDot} />
+            <Text style={styles.judgeTitle}>IMD PS-76 Time Simulator</Text>
+          </View>
+        </View>
+        
+        <View style={styles.timeJumps}>
+          {JUMP_TIMES.map(jt => (
+            <TouchableOpacity key={jt.time} onPress={() => setJudgeTimeOverride(jt.time)} style={[styles.timeJumpBtn, judgeTimeOverride === jt.time && {backgroundColor: '#334155'}]}>
+              <Text style={styles.timeJumpText}>{jt.time}</Text>
+              <Text style={styles.timeJumpSub}>{jt.label}</Text>
+            </TouchableOpacity>
+          ))}
+          <TouchableOpacity onPress={() => setJudgeTimeOverride(null)} style={styles.timeJumpBtn}>
+            <Text style={styles.timeJumpText}>Live</Text>
+            <Text style={styles.timeJumpSub}>Reset</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.autoSyncText}>Auto-synchronized: {conf.pillLabel} Persona active for current simulation window.</Text>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 150}}>
+        {/* 2. Persona Bar */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.personaBar}>
+          {PERSONAS.map(p => {
+            const isActive = persona === p;
+            const pConf = PERSONA_CONFIG[p];
+            return (
+              <TouchableOpacity key={p} onPress={() => setPersona(p)} style={[styles.personaChip, isActive && styles.personaChipActive]}>
+                <Feather name={pConf.icon} size={14} color={isActive ? '#93C5FD' : '#94A3B8'} style={{marginRight: 6}} />
+                <Text style={[styles.personaChipText, isActive && styles.personaChipTextActive]}>{pConf.pillLabel}</Text>
+              </TouchableOpacity>
+            )
+          })}
+        </ScrollView>
+
+        {/* Real-time summary sub-bar */}
+        <View style={styles.subBar}>
+          <View style={styles.subBarLeft}>
+            <View style={styles.subBarIcon}>
+              <Feather name="cloud-rain" size={16} color="#FBBF24" />
+            </View>
+            <Text style={styles.tempDisplay}>{weatherData.temperature}°C <Text style={styles.condDisplay}>Scattered Monsoon Showers</Text></Text>
+          </View>
+          <View style={styles.simTimeBadge}>
+            <Feather name="clock" size={12} color="#22D3EE" />
+            <Text style={styles.simTimeText}>{judgeTimeOverride || 'Live'}</Text>
+          </View>
+        </View>
+
+        {/* 3. Hero Section (Dynamic Action Card) */}
+        <View style={styles.heroWrapper}>
+          {/* Glowing Shadow Mock */}
+          <View style={[styles.heroGlow, { backgroundColor: conf.glow }]} />
+          
+          <LinearGradient colors={conf.gradColors} style={[styles.heroCard, { borderColor: conf.border }]}>
+            <View style={styles.heroTopRow}>
+              <View style={styles.heroTopLeft}>
+                <View style={styles.heroBadge}>
+                  <Feather name="zap" size={10} color="#FDE047" />
+                  <Text style={styles.heroBadgeText}>{conf.title}</Text>
+                </View>
+                <View style={[styles.severityBadge, {backgroundColor: conf.badgeBg}]}>
+                  <Text style={[styles.severityText, {color: conf.badgeText}]}>{conf.badge}</Text>
+                </View>
+              </View>
+              <Text style={styles.confidenceText}><Feather name="shield" size={10} color="#6EE7B7" /> 94% IMD Confidence</Text>
+            </View>
+
+            <View style={styles.heroContent}>
+              <View style={styles.heroIconBox}>
+                <Feather name={conf.icon} size={26} color="#fff" />
+              </View>
+              <View style={{flex: 1, paddingLeft: 14}}>
+                <Text style={styles.heroTitle}>
+                  {loading ? 'Fetching insights...' : (actionCards[0]?.title || conf.heroHeading || 'Advisory Generation')}
+                </Text>
+                <Text style={styles.heroInstruction}>
+                  {loading ? 'Analyzing live satellite data...' : (actionCards[0]?.instruction || conf.heroText || 'Loading advisory...')}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.heroRibbon}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Feather name="navigation" size={12} color="rgba(255,255,255,0.8)" />
+                <Text style={styles.ribbonText}>{conf.ribbon}</Text>
+              </View>
+              <View style={styles.windowBox}>
+                <Feather name="clock" size={10} color="#fff" />
+                <Text style={styles.windowText}>{conf.window}</Text>
+              </View>
+            </View>
+            <View style={styles.aiRationale}>
+              <Feather name="cpu" size={10} color="rgba(255,255,255,0.7)" />
+              <Text style={styles.aiRationaleText}>{conf.rationale}</Text>
+            </View>
+          </LinearGradient>
+        </View>
+
+        {/* 4. 2x2 Dynamic Metrics Grid */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>CONTEXTUAL TELEMETRY</Text>
+          <View style={styles.sectionSubLabel}><Text style={styles.sectionSubText}>{conf.pillLabel} Telemetry</Text></View>
+        </View>
+
+        <View style={styles.gridContainer}>
+          {conf.metrics.map((m, i) => (
+            <View key={i} style={[styles.gridTile, {borderColor: m.bg}]}>
+              <View style={styles.gridTop}>
+                <Text style={styles.gridLabel}>{m.label}</Text>
+                <View style={[styles.gridIconWrap, {backgroundColor: m.bg}]}>
+                  <Feather name={m.icon} size={14} color={m.color} />
+                </View>
+              </View>
+              <View>
+                <Text style={[styles.gridVal, {color: m.color.includes('F43F5E') || m.color.includes('FB7185') ? '#FB7185' : '#F1F5F9'}]}>{m.val}</Text>
+                <Text style={styles.gridSub}>{m.sub}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+
+        {/* 5. Citizen Radar Widget */}
+        <View style={styles.citizenRadarCard}>
+          <View style={styles.radarHeader}>
+            <View style={styles.radarHeaderLeft}>
+              <View style={styles.radarIconBox}>
+                <Feather name="radio" size={14} color="#34D399" />
+              </View>
+              <View>
+                <Text style={styles.radarTitle}>Citizen Radar <Text style={styles.radarTag}>Crowd-AI Validation</Text></Text>
+              </View>
+            </View>
+            <Text style={styles.radarCount}>142 verified nearby</Text>
+          </View>
+          <Text style={styles.radarPrompt}>Is it raining near you right now?</Text>
+          
+          <View style={styles.radarChips}>
+            {[{lbl: 'Clear', sub: 'Dry road', i: 'sun', col: '#FBBF24'}, {lbl: 'Drizzle', sub: '< 2.5 mm/h', i: 'cloud-drizzle', col: '#60A5FA'}, {lbl: 'Heavy Rain', sub: 'Flooding', i: 'cloud-lightning', col: '#22D3EE'}].map(status => (
+              <TouchableOpacity key={status.lbl} onPress={() => handleRadar(status.lbl)} style={[styles.voteChip, radarVote === status.lbl && {backgroundColor: '#1E293B', borderColor: status.col}]}>
+                <Feather name={status.i} size={16} color={status.col} style={{marginBottom: 4}} />
+                <Text style={styles.voteText}>{status.lbl}</Text>
+                <Text style={styles.voteSub}>{status.sub}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+      </ScrollView>
+    </SafeAreaView>
+  );

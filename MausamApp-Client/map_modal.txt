@@ -1,0 +1,16 @@
+      <Modal visible={isMapVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.mapHeader}>
+            <Text style={styles.mapTitle}>Drop a Pin to Analyze Region</Text>
+            <TouchableOpacity onPress={() => setIsMapVisible(false)}>
+              <Feather name="x" size={24} color="#CBD5E1" />
+            </TouchableOpacity>
+          </View>
+          <MapView style={styles.map} initialRegion={mapRegion} onPress={handleMapPress} userInterfaceStyle="dark">
+            {tempLocation && <Marker coordinate={tempLocation} pinColor="#22D3EE" />}
+          </MapView>
+          <TouchableOpacity style={styles.confirmBtn} onPress={confirmLocation} disabled={!tempLocation}>
+            <Text style={styles.confirmBtnText}>{tempLocation ? "Analyze This Location" : "Tap anywhere on the map"}</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
