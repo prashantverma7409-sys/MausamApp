@@ -25,7 +25,7 @@ const PERSONA_CONFIG = {
     badge: 'PESTICIDE WASHOFF ALERT', badgeBg: '#34D399', badgeText: '#0F172A',
     gradColors: ['#047857', '#0F766E', '#064E3B'], glow: 'rgba(16, 185, 129, 0.5)', border: 'rgba(52, 211, 153, 0.3)',
     ribbon: 'Soil Saturation: 88% (Adequate)', window: 'Dry Window: Tomorrow 06:00',
-    rationale: 'IMD Agromet Advisory PS-76: High chemical runoff risk',
+    rationale: 'IMD Agromet Advisory High chemical runoff risk',
     metrics: [
       { label: 'Soil Moisture', val: '88%', sub: 'High saturation in black soil', icon: 'droplet', color: '#34D399', bg: 'rgba(16, 185, 129, 0.15)' },
       { label: 'Rainfall Predictions', val: '14mm expected', sub: 'Next 4 hours critical', icon: 'cloud-rain', color: '#60A5FA', bg: 'rgba(96, 165, 250, 0.15)' },
@@ -218,11 +218,8 @@ const HomeScreen = () => {
           </View>
           <View>
             <View style={styles.badgeRow}>
-              <Text style={styles.imdBadge}>IMD PS-76</Text>
-              <View style={styles.offlinePill}>
-                <View style={styles.greenPulse} />
-                <Text style={styles.offlineText}>SQLite Offline Cached (2m ago)</Text>
-              </View>
+              <Text style={styles.imdBadge}>IMD</Text>
+
             </View>
                         <TouchableOpacity onPress={() => setIsMapVisible(true)} style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.locationText}>{weatherData.location || "Unknown"} <Text style={styles.pinCode}>Tap to map</Text></Text>
@@ -237,7 +234,7 @@ const HomeScreen = () => {
         <View style={styles.judgeHeader}>
           <View style={styles.judgeHeaderLeft}>
             <View style={styles.cyanDot} />
-            <Text style={styles.judgeTitle}>IMD PS-76 Time Simulator</Text>
+            <Text style={styles.judgeTitle}>IMD Time Simulator</Text>
           </View>
         </View>
         
@@ -366,10 +363,9 @@ const HomeScreen = () => {
                 <Feather name="radio" size={14} color="#34D399" />
               </View>
               <View>
-                <Text style={styles.radarTitle}>Citizen Radar <Text style={styles.radarTag}>Crowd-AI Validation</Text></Text>
+                <Text style={styles.radarTitle}>Citizen Radar <Text style={styles.radarCount}>142 verified nearby</Text></Text>
               </View>
             </View>
-            <Text style={styles.radarCount}>142 verified nearby</Text>
           </View>
           <Text style={styles.radarPrompt}>Is it raining near you right now?</Text>
           

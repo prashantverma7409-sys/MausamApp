@@ -1,8 +1,7 @@
 import { Platform } from 'react-native';
 
 const getBaseUrl = () => {
-    // Using your computer's local IP address so your physical phone can reach the backend
-    return 'http://10.232.201.187:8004';
+    return 'http://localhost:8005';
 };
 
 const BASE_URL = getBaseUrl();
